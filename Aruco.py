@@ -8,9 +8,9 @@ if __name__ == '__main__':
     while (True):
         ret, frame = cap.read()
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_1000)
+        aruco_dict = aruco.Dictionary_get(aruco.DICT_4X4_50)
         arucoParameters = aruco.DetectorParameters_create()
-        corners, ids, rejectedImgPoints = aruco.detectMarkers(
+        rejectedImgPoints, ids, corners = aruco.detectMarkers(
             gray, aruco_dict, parameters=arucoParameters)
         frame = aruco.drawDetectedMarkers(frame, corners)
         cv2.imshow('Display', frame)
