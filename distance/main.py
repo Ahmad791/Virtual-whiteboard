@@ -1,8 +1,14 @@
+
+import os
+from os.path import isfile
+import pyautogui
+import imutils
 import cv2
 from cvzone.HandTrackingModule import HandDetector
 import math
 import numpy as np
 import cvzone
+import mss
 import argparse
 import time
 import random
@@ -19,6 +25,9 @@ secondRead = 100
 
 bordDistance = None
 lockboard = 100
+
+updatedScreenShot = None
+
 
 
 def countSeconds():
@@ -43,6 +52,32 @@ def countFiveSeconds():
         print("retrying to set")
         threading.Timer(4, countFiveSeconds).start()
 
+
+def loadscreenshot():
+    image = pyautogui.screenshot()
+    image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+    cv2.imwrite("in_memory_to_disk.png", image)
+    image = cv2.imread("in_memory_to_disk.png")
+    cv2.imshow("Screenshot", image)
+    threading.Timer(1, loadscreenshot).start()
+
+def takeScreenshot():
+    with mss.mss() as sct:
+        filename = sct.shot(output="/Users/megbarya/Desktop/university/CGL/screenshots/mon-{mon}.png", callback=on_exists)
+        print(filename)
+
+    threading.Timer(5, takeScreenshot).start()
+
+def on_exists(fname):
+    if isfile(fname):
+        newfile = fname + '.old'
+        print('{0} -> {1}'.format(fname, newfile))
+        os.rename(fname, newfile)
+    return True
+
+loadscreenshot()
+# threading.Timer(1, takeScreenshot).start()
+# threading.Timer(5, loadscreenshot).start()
 
 
 
@@ -97,10 +132,10 @@ while True:
 
         # cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 255), 3)
         cvzone.putTextRect(img, f'{int(distanceCM)} cm', (x + 5, y - 10)) # this display the real distance
-        if Start is None:
+        if Start is None: # start the threads
             Start = 1
-            threading.Timer(1, countSeconds).start()
-            threading.Timer(5, countFiveSeconds).start()
+            countSeconds()
+            countFiveSeconds()
 
         if bordDistance is not None:##...Write...Hold...Erase...Status
             fingerWriter = detector.fingersUp(hands[0])[1] #alsabab
@@ -134,5 +169,5 @@ while True:
 
 
 
-    cv2.imshow("Image", img)
+    cv2.imshow("Monitor", img)
     cv2.waitKey(1)
