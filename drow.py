@@ -10,10 +10,13 @@ import pyautogui as pyautogui
 
 pygame.init()
 
+
+print("help")
 FPS = 60 #frames per second setting
 fpsClock = pygame.time.Clock()
 
 #set up the window
+
 screen = pygame.display.set_mode((1500, 500), pygame.RESIZABLE , pygame.SRCALPHA, 0)
 pygame.display.set_caption('animation')
 
