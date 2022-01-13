@@ -14,7 +14,7 @@ if __name__ == '__main__':
         corners, ids, rejectedImgPoints= aruco.detectMarkers(
             gray, aruco_dict, parameters=arucoParameters)
         frame = aruco.drawDetectedMarkers(frame, corners)
-        cv2.imshow('Display', frame)
+        
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     cap.release()
