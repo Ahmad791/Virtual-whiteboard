@@ -11,6 +11,10 @@ from threading import Thread
 import screeninfo
 import pyscreenshot
 
+from time import sleep
+
+import findScreen
+
 # prepare screenshot and projectot's coordinations
 screen = screeninfo.get_monitors()[0]
 screen2 = screeninfo.get_monitors()[1]
@@ -69,9 +73,36 @@ def loadscreenshot():
 
 # Webcam
 cap = cv2.VideoCapture(2)
-cap.set(3, 800)
-cap.set(4, 600)
-success, img = cap.read()
+cap.set(3, 1920)
+cap.set(4, 1080)
+
+template = cv2.imread("rso.jpeg")
+
+while True:
+    success, img = cap.read()
+    image = img
+    cv2.imshow(window_name,template)
+    #image= cv2.add(image,np.array([50.0]))
+    #image=cv2.pow(image,2)
+    res=findScreen.findBoard(image,template)
+    #re=cv2.findChessboardCorners(image, (8, 8),flags=chessboard_flags)
+    if res!=False:
+        break
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        cv2.destroyAllWindows()
+        break
+
+cap.release()
+del cap
+re=(int(res[0]*1080/1920),int(res[1]*720/1080),int(res[2]*1080/1920),int(res[3]*720/1080))
+
+
+cap = cv2.VideoCapture(2)
+cap.set(3, 1080)
+cap.set(4, 720)
+
+
+#success, img = cap.read()
 #imgCanvas = np.zeros(np.shape(img), np.uint8)
 imgCanvas = np.zeros(np.shape(globalImage), np.uint8)
 # Hand Detector
@@ -99,10 +130,13 @@ def UpdateStatus(img,xs,ys,msg):
     cv2.putText(img, msg, (xs, ys), font, 1, (255, 0, 0), 4)
 
     return img
+chessboard_flags = cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FAST_CHECK + cv2.CALIB_CB_NORMALIZE_IMAGE
 
-
+#
 #threading.Thread(target=startBoard())
 loadscreenshot()
+#look for screen
+
 xp,yp=0,0
 mode=2#start with nothing
 counter=0
@@ -136,18 +170,24 @@ while True:
             # print('bordDistance distance - ', bordDistance)
             if bordDistance <= distanceCM and fingerWriter==1:
                 xs, ys = lmList[8]
+                print(int((xs-re[0])*(1920/(re[2]-re[0]))))
+                print(xs)
+                print(re)
                 if xp == 0 and yp == 0:
                     xp, yp = xs, ys
-                cv2.line(imgCanvas, (xp, yp), (xs, ys), (255,255,255), 15)
-                xp, yp = xs, ys
-                img = UpdateStatus(img,xs,ys,"WRITE!!!")
-                counter=0
+                if xp>re[0] and xs>re[0] and xp<re[2] and xs<re[2] and yp>re[1] and ys>re[1] and yp<re[3] and ys<re[3]:
+                    cv2.line(imgCanvas, (int((xp-re[0])*(1920/(re[2]-re[0]))), int((yp-re[1])*(1080/(re[3]-re[1])))), (int((xs-re[0])*(1920/(re[2]-re[0]))), int((ys-re[1])*(1080/(re[3]-re[1])))), (255,255,255), 15)
+                    xp, yp = xs, ys
+                    img = UpdateStatus(img,xs,ys,"WRITE!!!")
+                    counter=0
+                else:
+                    img = UpdateStatus(img,xs,ys,"out of bounds")
             elif bordDistance <= distanceCM and fingerWriter==0:#mods
                 if (mode!=0 and counter>15):
                     xs, ys = lmList[3]
                     img = UpdateStatus(img, xs, ys, "Erase...")
-                    cv2.circle(img, (xs, ys), 50, (0, 0, 0),4)
-                    cv2.circle(imgCanvas, (xs, ys), 50, (0, 0, 0), cv2.FILLED)
+                    cv2.circle(img, (int((xs-re[0])*(1920/(re[2]-re[0]))), int((ys-re[1])*(1080/(re[3]-re[1])))), 50, (0, 0, 0),4)
+                    cv2.circle(imgCanvas, ((int((xs-re[0])*(1920/(re[2]-re[0]))), int((ys-re[1])*(1080/(re[3]-re[1]))))), 50, (0, 0, 0), cv2.FILLED)
                 counter=counter+1
                 xp,yp=0,0
             else:
@@ -180,7 +220,6 @@ while True:
     newImg = cv2.bitwise_and(newImg,imgInv)
     newImg = cv2.bitwise_or(newImg,imgCanvas)
     cv2.imshow("pic",img)
-    
 
     cv2.imshow(window_name, newImg)
     if cv2.waitKey(1) & 0xFF == ord('q'):
