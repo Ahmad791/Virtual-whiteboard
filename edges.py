@@ -69,17 +69,17 @@ def findEdges(recimg):
         # calculate the perspective transform matrix and warp
         # the perspective to grab the screen
         M = cv2.getPerspectiveTransform(rect, dst)
-        warp = cv2.warpPerspective(img, M, (maxWidth, maxHeight))
-        points = np.array([[tl], [br]])
-        homg_points = np.array([[x, y, 1] for [[x, y]] in points]).T
-        transf_homg_points = M.dot(homg_points)
-        transf_homg_points /= transf_homg_points[2]
-        transf_points = np.array([[[x,y]] for [x, y] in transf_homg_points[:2].T])
-        cv2.line(warp,transf_points[0][0],transf_points[1][0], (255,0,255), 15)
-        cv2.imshow("wrap",warp)
+        #warp = cv2.warpPerspective(img, M, (maxWidth, maxHeight))
+        #cv2.imshow("wrap",warp)
         
-        
-        
-        
-        return M
+        return M,maxHeight,maxWidth
     return []
+
+def getRedirectedPoints(M,points):
+    #points = np.array([tl, br])
+    homg_points = np.array([[x, y, 1] for [x, y] in points]).T
+    transf_homg_points = M.dot(homg_points)
+    transf_homg_points /= transf_homg_points[2]
+    transf_points = np.array([[[x,y]] for [x, y] in transf_homg_points[:2].T],dtype=np.int32)
+    return transf_points
+    #cv2.line(warp,transf_points[0][0],transf_points[1][0], (0,0,255), 15)

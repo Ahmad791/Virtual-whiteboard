@@ -14,7 +14,7 @@ import pyscreenshot
 from time import sleep
 
 import findScreen
-from edges import findEdges
+from edges import findEdges, getRedirectedPoints
 
 # prepare screenshot and projectot's coordinations
 screen = screeninfo.get_monitors()[0]
@@ -96,9 +96,13 @@ while True:
     if cv2.waitKey(1) & 0xFF == ord('q'):
         cv2.destroyAllWindows()
         break
-
 cap.release()
 del cap
+
+M=res[0]
+scaleH=res[1]
+scaleW=res[2]
+
 
 
 cap = cv2.VideoCapture(2)
@@ -174,24 +178,20 @@ while True:
             # print('bordDistance distance - ', bordDistance)
             if bordDistance <= distanceCM and fingerWriter==1:
                 xs, ys = lmList[8]
-                print(int((xs-re[0])*(1920/(re[2]-re[0]))))
-                print(xs)
-                print(re)
                 if xp == 0 and yp == 0:
                     xp, yp = xs, ys
-                if xp>re[0] and xs>re[0] and xp<re[2] and xs<re[2] and yp>re[1] and ys>re[1] and yp<re[3] and ys<re[3]:
-                    cv2.line(imgCanvas, (int((xp-re[0])*(1920/(re[2]-re[0]))), int((yp-re[1])*(1080/(re[3]-re[1])))), (int((xs-re[0])*(1920/(re[2]-re[0]))), int((ys-re[1])*(1080/(re[3]-re[1])))), (255,255,255), 15)
-                    xp, yp = xs, ys
-                    img = UpdateStatus(img,xs,ys,"WRITE!!!")
-                    counter=0
-                else:
-                    img = UpdateStatus(img,xs,ys,"out of bounds")
+                projectedPoints=getRedirectedPoints(M,[[xs,ys],[xp,yp]])
+                cv2.line(imgCanvas, projectedPoints[0][0],projectedPoints[1][0], (255,255,255), 15)
+                xp, yp = xs, ys
+                img = UpdateStatus(img,xs,ys,"WRITE!!!")
+                counter=0
             elif bordDistance <= distanceCM and fingerWriter==0:#mods
                 if (mode!=0 and counter>15):
+                    projectedPoints=getRedirectedPoints(M,[[xs,ys]])
                     xs, ys = lmList[3]
                     img = UpdateStatus(img, xs, ys, "Erase...")
-                    cv2.circle(img, (int((xs-re[0])*(1920/(re[2]-re[0]))), int((ys-re[1])*(1080/(re[3]-re[1])))), 50, (0, 0, 0),4)
-                    cv2.circle(imgCanvas, ((int((xs-re[0])*(1920/(re[2]-re[0]))), int((ys-re[1])*(1080/(re[3]-re[1]))))), 50, (0, 0, 0), cv2.FILLED)
+                    cv2.circle(img, projectedPoints[0][0], 50, (0, 0, 0),4)
+                    cv2.circle(imgCanvas, projectedPoints[0][0], 50, (0, 0, 0), cv2.FILLED)
                 counter=counter+1
                 xp,yp=0,0
             else:
