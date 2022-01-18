@@ -90,15 +90,15 @@ while True:
     #res=findScreen.findBoard(image,template)
     res=findEdges(image)
     #re=cv2.findChessboardCorners(image, (8, 8),flags=chessboard_flags)
-    if res!=False:
-        break
+    if len(res)!=0:
+        print(res)
+        #break
     if cv2.waitKey(1) & 0xFF == ord('q'):
         cv2.destroyAllWindows()
         break
 
 cap.release()
 del cap
-re=(int(res[0]*1080/1920),int(res[1]*720/1080),int(res[2]*1080/1920),int(res[3]*720/1080))
 
 
 cap = cv2.VideoCapture(2)
