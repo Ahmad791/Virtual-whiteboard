@@ -1,17 +1,29 @@
-import numpy as np
 import cv2
+import numpy as np
 
-cap = cv2.VideoCapture(0)
+def findEdges(recimg):
+    img = recimg
+    cv2.imshow("1",img)
+    #Grayscale
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-while True:
-    _, frame = cap.read()
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    edges = cv2.Canny(gray, 30, 100)
-    chess=cv2.imread("chess.jpg")
-    cv2.imshow("edges", edges)
-    cv2.imshow("gray", gray)
-    if cv2.waitKey(1) == ord("q"):
-        break
+    #Binarization
+    ret,th1 = cv2.threshold(gray,200,255,cv2.THRESH_BINARY)
+    cv2.imshow("2",th1)
+    contours, hierarchy = cv2.findContours(th1, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-cap.release()
-cv2.destroyAllWindows()
+    #Sort only those with a large area
+    areas = []
+    for cnt in contours:
+        area = cv2.contourArea(cnt)
+        if area > 10000:
+            epsilon = 0.1*cv2.arcLength(cnt,True)
+            approx = cv2.approxPolyDP(cnt,epsilon,True)
+            areas.append(approx)
+    
+            
+    
+    cv2.drawContours(img,areas,-1,(0,255,0),3)
+    cv2.imshow("3",img)
+    print("areas are"+str(areas))
+    return False

@@ -14,6 +14,7 @@ import pyscreenshot
 from time import sleep
 
 import findScreen
+from edges import findEdges
 
 # prepare screenshot and projectot's coordinations
 screen = screeninfo.get_monitors()[0]
@@ -73,18 +74,21 @@ def loadscreenshot():
 
 # Webcam
 cap = cv2.VideoCapture(2)
-cap.set(3, 1920)
-cap.set(4, 1080)
-
-template = cv2.imread("rso.jpeg")
+cap.set(2, 1080)
+cap.set(2, 720)
+cap.set(cv2.CAP_PROP_AUTOFOCUS, 0)
+template = cv2.imread("whitescreen.jpeg")
+cv2.rectangle(template,(10,0),(474,266) , (0,0,0), 10)
 
 while True:
     success, img = cap.read()
     image = img
     cv2.imshow(window_name,template)
-    #image= cv2.add(image,np.array([50.0]))
+    cv2.imshow("so",img)
+    image= cv2.add(image,np.array([55.0]))
     #image=cv2.pow(image,2)
-    res=findScreen.findBoard(image,template)
+    #res=findScreen.findBoard(image,template)
+    res=findEdges(image)
     #re=cv2.findChessboardCorners(image, (8, 8),flags=chessboard_flags)
     if res!=False:
         break
@@ -130,7 +134,7 @@ def UpdateStatus(img,xs,ys,msg):
     cv2.putText(img, msg, (xs, ys), font, 1, (255, 0, 0), 4)
 
     return img
-chessboard_flags = cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FAST_CHECK + cv2.CALIB_CB_NORMALIZE_IMAGE
+#chessboard_flags = cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FAST_CHECK + cv2.CALIB_CB_NORMALIZE_IMAGE
 
 #
 #threading.Thread(target=startBoard())
@@ -219,9 +223,9 @@ while True:
     imgInv = cv2.cvtColor(imgInv,cv2.COLOR_GRAY2BGR)
     newImg = cv2.bitwise_and(newImg,imgInv)
     newImg = cv2.bitwise_or(newImg,imgCanvas)
-    cv2.imshow("pic",img)
 
     cv2.imshow(window_name, newImg)
+    cv2.imshow("pic",img)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         cv2.destroyAllWindows()
         break
