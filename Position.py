@@ -25,6 +25,7 @@ window_name = 'projector'
 cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
 cv2.moveWindow(window_name, screen2.x - 1, screen2.y - 1)
 cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN)
+
 # end of prepare screenshot and projectot's coordinations
 
 
@@ -74,17 +75,17 @@ def loadscreenshot():
 
 # Webcam
 cap = cv2.VideoCapture(2)
-cap.set(2, 1080)
-cap.set(2, 720)
+cap.set(3, 1080)
+cap.set(4, 720)
 cap.set(cv2.CAP_PROP_AUTOFOCUS, 0)
 template = cv2.imread("whitescreen.jpeg")
-cv2.rectangle(template,(10,0),(474,266) , (0,0,0), 10)
+cv2.rectangle(template,(0,0),(474,266) , (0,0,0), 10)
 
+cv2.imshow(window_name, template)
 while True:
     success, img = cap.read()
     image = img
-    cv2.imshow(window_name,template)
-    cv2.imshow("so",img)
+    #cv2.imshow(window_name,template)
     image= cv2.add(image,np.array([55.0]))
     #image=cv2.pow(image,2)
     #res=findScreen.findBoard(image,template)
@@ -99,11 +100,14 @@ while True:
 cap.release()
 del cap
 
+window_name = 'projector'
+cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
+cv2.moveWindow(window_name, screen2.x - 1, screen2.y - 1)
+cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN)
+
 M=res[0]
 scaleH=res[1]
 scaleW=res[2]
-
-
 
 cap = cv2.VideoCapture(2)
 cap.set(3, 1080)
@@ -223,9 +227,9 @@ while True:
     imgInv = cv2.cvtColor(imgInv,cv2.COLOR_GRAY2BGR)
     newImg = cv2.bitwise_and(newImg,imgInv)
     newImg = cv2.bitwise_or(newImg,imgCanvas)
-
+    
     cv2.imshow(window_name, newImg)
-    cv2.imshow("pic",img)
+    #cv2.imshow("pic",img)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         cv2.destroyAllWindows()
         break
