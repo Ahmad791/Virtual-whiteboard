@@ -77,7 +77,7 @@ def loadscreenshot():
 cap = cv2.VideoCapture(2)
 cap.set(3, 1080)
 cap.set(4, 720)
-cap.set(cv2.CAP_PROP_AUTOFOCUS, 0)
+#cap.set(cv2.CAP_PROP_AUTOFOCUS, 0)
 template = cv2.imread("whitescreen.jpeg")
 cv2.rectangle(template,(0,0),(474,266) , (0,0,0), 10)
 
@@ -86,7 +86,7 @@ while True:
     success, img = cap.read()
     image = img
     #cv2.imshow(window_name,template)
-    image= cv2.add(image,np.array([55.0]))
+    image= cv2.add(image,np.array([50.0]))
     #image=cv2.pow(image,2)
     #res=findScreen.findBoard(image,template)
     res=findEdges(image)
@@ -184,14 +184,14 @@ while True:
                 xs, ys = lmList[8]
                 if xp == 0 and yp == 0:
                     xp, yp = xs, ys
-                projectedPoints=getRedirectedPoints(M,[[xs,ys],[xp,yp]])
+                projectedPoints=getRedirectedPoints(M,[[xs,ys],[xp,yp]],scaleH,scaleW)
                 cv2.line(imgCanvas, projectedPoints[0][0],projectedPoints[1][0], (255,255,255), 15)
                 xp, yp = xs, ys
                 img = UpdateStatus(img,xs,ys,"WRITE!!!")
                 counter=0
             elif bordDistance <= distanceCM and fingerWriter==0:#mods
-                if (mode!=0 and counter>15):
-                    projectedPoints=getRedirectedPoints(M,[[xs,ys]])
+                if (mode!=0 and counter>5):
+                    projectedPoints=getRedirectedPoints(M,[[xs,ys]],scaleH,scaleW)
                     xs, ys = lmList[3]
                     img = UpdateStatus(img, xs, ys, "Erase...")
                     cv2.circle(img, projectedPoints[0][0], 50, (0, 0, 0),4)
@@ -200,7 +200,7 @@ while True:
                 xp,yp=0,0
             else:
                 counter=counter+1
-                if(counter>15):
+                if(counter>10):
                     xp,yp=0,0
                 xs, ys = lmList[0]
                 img = UpdateStatus(img, xs, ys, "Nothing...")

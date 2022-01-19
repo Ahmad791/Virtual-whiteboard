@@ -75,11 +75,11 @@ def findEdges(recimg):
         return M,maxHeight,maxWidth
     return []
 
-def getRedirectedPoints(M,points):
+def getRedirectedPoints(M,points,maxHeight,maxWidth):
     #points = np.array([tl, br])
     homg_points = np.array([[x, y, 1] for [x, y] in points]).T
     transf_homg_points = M.dot(homg_points)
     transf_homg_points /= transf_homg_points[2]
-    transf_points = np.array([[[x,y]] for [x, y] in transf_homg_points[:2].T],dtype=np.int32)
+    transf_points = np.array([[[x*(1920/maxWidth),y*(1080/maxHeight)]] for [x, y] in transf_homg_points[:2].T],dtype=np.int32)
     return transf_points
     #cv2.line(warp,transf_points[0][0],transf_points[1][0], (0,0,255), 15)
