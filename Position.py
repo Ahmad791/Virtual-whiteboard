@@ -4,16 +4,13 @@ import math
 import numpy as np
 import cvzone
 import argparse
-import time
 import random
 import threading
 from threading import Thread
 import screeninfo
 import pyscreenshot
 
-from time import sleep
 
-import findScreen
 from edges import findEdges, getRedirectedPoints
 
 # prepare screenshot and projectot's coordinations

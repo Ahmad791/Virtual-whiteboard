@@ -75,7 +75,7 @@ def findEdges(recimg):
         return M,maxHeight,maxWidth
     return []
 
-def getRedirectedPoints(M,points,maxHeight,maxWidth):
+def getRedirectedPoints(M,points,maxHeight,maxWidth):#gets the projection matrix, point to project, width and height for scaling and projects the point on the screen
     #points = np.array([tl, br])
     homg_points = np.array([[x, y, 1] for [x, y] in points]).T
     transf_homg_points = M.dot(homg_points)
