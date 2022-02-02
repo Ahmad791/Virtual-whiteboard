@@ -1,7 +1,6 @@
 from textwrap import wrap
 import cv2
 import numpy as np
-from operator import itemgetter
 
 def findEdges(recimg):
     img = recimg
@@ -75,11 +74,11 @@ def findEdges(recimg):
         return M,maxHeight,maxWidth
     return []
 
-def getRedirectedPoints(M,points,maxHeight,maxWidth):#gets the projection matrix, point to project, width and height for scaling and projects the point on the screen
+def getRedirectedPoints(M,points,scaleH,scaleW):#gets the projection matrix, point to project, width and height for scaling and projects the point on the screen
     #points = np.array([tl, br])
     homg_points = np.array([[x, y, 1] for [x, y] in points]).T
     transf_homg_points = M.dot(homg_points)
     transf_homg_points /= transf_homg_points[2]
-    transf_points = np.array([[[x*(1920/maxWidth),y*(1080/maxHeight)]] for [x, y] in transf_homg_points[:2].T],dtype=np.int32)
+    transf_points = np.array([[[x*scaleW,y*scaleH]] for [x, y] in transf_homg_points[:2].T],dtype=np.int32)
     return transf_points
     #cv2.line(warp,transf_points[0][0],transf_points[1][0], (0,0,255), 15)

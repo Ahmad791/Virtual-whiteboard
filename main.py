@@ -11,7 +11,7 @@ import screeninfo
 import pyscreenshot
 from detectBoard import detectBoard
 
-from edges import findEdges, getRedirectedPoints
+from edges import getRedirectedPoints
 
 # prepare screenshot and projectot's coordinations
 screen = screeninfo.get_monitors()[0]
@@ -79,8 +79,8 @@ cap.set(4, 720)
 #cap.set(cv2.CAP_PROP_AUTOFOCUS, 0)
 
 M=res[0]
-scaleH=res[1]
-scaleW=res[2]
+scaleH=height/res[1]
+scaleW=width/res[2]
 
 imgCanvas = np.zeros(np.shape(globalImage), np.uint8)
 # Hand Detector

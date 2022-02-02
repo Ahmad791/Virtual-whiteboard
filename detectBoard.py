@@ -20,7 +20,7 @@ def detectBoard():
     cap.set(3, 1080)
     cap.set(4, 720)
     template = cv2.imread("whitescreen.jpeg")
-    cv2.rectangle(template,(0,0),(474,266) , (0,0,0), 10)
+    cv2.rectangle(template,(0,0),(474,266) , (0,0,0), 10)#(474,266) is the size of the white picture
 
     cv2.imshow(window_name, template)
     while True:
