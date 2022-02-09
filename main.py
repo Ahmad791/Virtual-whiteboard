@@ -6,12 +6,13 @@ import cvzone
 import argparse
 import random
 import threading
-from threading import Thread
 import screeninfo
 import pyscreenshot
+import sys
 from detectBoard import detectBoard
-
 from edges import getRedirectedPoints
+
+
 
 # prepare screenshot and projectot's coordinations
 screen = screeninfo.get_monitors()[0]
@@ -34,6 +35,18 @@ globalImage=cv2.imread("in_memory_to_disk.png")
 bordDistance = None
 lockboard = 100
 
+def getCam():#look for unused external camera first, if not use built in
+    cap=cv2.VideoCapture(2)
+    if cap is None or not cap.isOpened():
+        cap=cv2.VideoCapture(3)
+        if cap is None or not cap.isOpened():
+            cap=cv2.VideoCapture(0)
+            if cap is None or not cap.isOpened():
+                sys.exit("No camera found")
+    return cap
+            
+        
+        
 
 def countSeconds():
     global secondRead
@@ -73,7 +86,7 @@ cv2.moveWindow(window_name, screen2.x - 1, screen2.y - 1)
 cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN)
 
 # Webcam
-cap = cv2.VideoCapture(2)
+cap = getCam()
 cap.set(3, 1080)
 cap.set(4, 720)
 #cap.set(cv2.CAP_PROP_AUTOFOCUS, 0)
