@@ -8,6 +8,7 @@ import random
 import threading
 import screeninfo
 import pyscreenshot
+import sys
 from detectBoard import detectBoard
 from edges import getRedirectedPoints
 
