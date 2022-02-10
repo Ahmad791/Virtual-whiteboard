@@ -6,12 +6,12 @@ import cvzone
 import argparse
 import random
 import threading
-from threading import Thread
 import screeninfo
 import pyscreenshot
 from detectBoard import detectBoard
-
 from edges import getRedirectedPoints
+
+
 
 # prepare screenshot and projectot's coordinations
 screen = screeninfo.get_monitors()[0]
@@ -73,7 +73,7 @@ cv2.moveWindow(window_name, screen2.x - 1, screen2.y - 1)
 cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN)
 
 # Webcam
-cap = cv2.VideoCapture(2)
+cap = cv2.VideoCapture(0)
 cap.set(3, 1080)
 cap.set(4, 720)
 #cap.set(cv2.CAP_PROP_AUTOFOCUS, 0)

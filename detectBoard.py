@@ -16,7 +16,7 @@ cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN
 
 def detectBoard():
 
-    cap = cv2.VideoCapture(2)
+    cap = cv2.VideoCapture(0)
     cap.set(3, 1080)
     cap.set(4, 720)
     template = cv2.imread("whitescreen.jpeg")

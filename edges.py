@@ -14,7 +14,7 @@ def findEdges(recimg):
     contours, hierarchy = cv2.findContours(th1, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     contours = sorted(contours, key = cv2.contourArea, reverse = True)[:1]
 
-    #Sort only those with a large area
+    #Sort only those with a lgetCam()arge area
     areas = []
     for cnt in contours:
         area = cv2.contourArea(cnt)
