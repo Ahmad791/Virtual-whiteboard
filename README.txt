@@ -17,7 +17,7 @@ the picture black and white (white is white and black for everything else), find
 largest one make a green border around it, then let the user pick the board. When he does make a transformation
 matrix (perspective transformation matrix).
 
-Next we need board distance to know when the user is writing, since we can't do that with one camera we make 
+Next we need the board distance to know when the user is writing, since we can't do that with one camera we make 
 the user put his hand on the board to measure the width of his hand in pixels, then we can measure distance 
 in relation to that, more pixels means closer to the camera (When the user twists his hand the code thinks
 the distance of the hand is larger than the board so we used that for interacting with the board). 
@@ -30,3 +30,5 @@ writes it puts a blue line on it but when the user erases it puts a black one, t
 the screenshot, if blue display the board, if black display screen.
 note: The code uses the transformation matrix to get the exact index location on the board.
 note: color white not blue for now.
+
+note: The current version does not work on mac, we are working on it.

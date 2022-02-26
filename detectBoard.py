@@ -26,7 +26,7 @@ def detectBoard():
     while True:
         success, img = cap.read()
         image = img
-        image= cv2.add(image,np.array([50.0]))
+        image= cv2.add(image,np.array([100.0]))
         res=findEdges(image)
         if len(res)!=0:
             print(res)
