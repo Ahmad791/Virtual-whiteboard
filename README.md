@@ -1,4 +1,6 @@
 ![](https://github.com/Ahmad791/Virtual-whiteboard/blob/master/media/20220412_140352.gif)
+
+
 How to run:
 1. Make sure you pc is connected to an external display (projector).
 2. run main.py
