@@ -75,8 +75,8 @@ cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN
 
 # Webcam
 cap = cv2.VideoCapture(0)
-cap.set(3, 1080)
-cap.set(4, 720)
+cap.set(3, 720)
+cap.set(4, 480)
 #cap.set(cv2.CAP_PROP_AUTOFOCUS, 0)
 
 M=res[0]
@@ -118,6 +118,7 @@ mode=2#start with nothing
 counter=0
 while True:
     success, img = cap.read()
+    cv2.imshow(window_name, img)
     hands, img = detector.findHands(img)
     distanceCM = random.randint(200,10000)
     if hands:
@@ -127,6 +128,7 @@ while True:
         x2, y2 = lmList[17]
         x3, y3 =lmList[0]
         x4, y4 =lmList[1]
+        print("here"+str(x))
 
         distance = max(int(math.sqrt((y2 - y1) ** 2 + (x2 - x1) ** 2)),int(math.sqrt((y3 - y4) ** 2 + (x3 - x4) ** 2)))
         A, B, C = coff

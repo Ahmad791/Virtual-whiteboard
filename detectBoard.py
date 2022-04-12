@@ -17,8 +17,8 @@ cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN
 def detectBoard():
 
     cap = cv2.VideoCapture(0)
-    cap.set(3, 1080)
-    cap.set(4, 720)
+    cap.set(3, 720)
+    cap.set(4, 480)
     template = cv2.imread("whitescreen.jpeg")
     cv2.rectangle(template,(0,0),(474,266) , (0,0,0), 10)#(474,266) is the size of the white picture
 
@@ -26,7 +26,7 @@ def detectBoard():
     while True:
         success, img = cap.read()
         image = img
-        image= cv2.add(image,np.array([100.0]))
+        image= cv2.add(image,np.array([80.0]))
         res=findEdges(image)
         if len(res)!=0:
             print(res)

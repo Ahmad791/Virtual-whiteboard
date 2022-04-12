@@ -72,8 +72,8 @@ def loadscreenshot():
 
 # Webcam
 cap = cv2.VideoCapture(2)
-cap.set(3, 1080)
-cap.set(4, 720)
+cap.set(3, 720)
+cap.set(4, 480)
 #cap.set(cv2.CAP_PROP_AUTOFOCUS, 0)
 template = cv2.imread("whitescreen.jpeg")
 cv2.rectangle(template,(0,0),(474,266) , (0,0,0), 10)
