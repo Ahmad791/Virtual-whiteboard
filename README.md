@@ -34,4 +34,5 @@ the screenshot, if blue display the board, if black display screen.
 note: The code uses the transformation matrix to get the exact index location on the board.
 note: color white not blue for now.
 
-note: The current version does not work on mac, we are working on it.
+note 1: The current version does not work on mac, we are working on it.
+note 2: We recommend using at least 1080p camera because it's hard to detect hands using lower resolution cameras
